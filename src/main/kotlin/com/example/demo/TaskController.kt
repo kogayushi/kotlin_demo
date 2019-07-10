@@ -7,13 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("/tasks")
-class TaskController {
+class TaskController(private val taskRepository: TaskRepository) {
     @GetMapping
     fun index(model: Model): String {
-        val tasks = listOf(
-                Task(1, "障子を張り替える", false),
-                Task(2, "定期検診に行く", true)
-        )
+
+        val tasks = taskRepository.findAll()
         model.addAttribute("tasks", tasks)
         return "tasks/index"
     }
