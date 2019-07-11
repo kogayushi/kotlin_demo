@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form th:method="post" th:action="@{./}" th:object="${taskCreateForm}">
+<form th:method="post" th:action="@{.}" th:object="${taskCreateForm}">
     <div>
         <label>
             内容： <input type="text" th:field="*{content}"/>
