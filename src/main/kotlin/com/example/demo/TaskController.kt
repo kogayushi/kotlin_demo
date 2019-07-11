@@ -18,6 +18,6 @@ class TaskController(private val taskRepository: TaskRepository) {
 
     @GetMapping("new")
     fun new(form: TaskCreateForm): String {
-        return "task/new"
+        return "tasks/new"
     }
 }
