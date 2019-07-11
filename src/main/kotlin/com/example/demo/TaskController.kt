@@ -1,22 +1,34 @@
 package com.example.demo
 
+import javassist.NotFoundException
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("/tasks")
 class TaskController(private val taskRepository: TaskRepository) {
+
     @GetMapping
     fun index(model: Model): String {
 
         val tasks = taskRepository.findAll()
         model.addAttribute("tasks", tasks)
         return "tasks/index"
+    }
+
+    @GetMapping("/{id}/edit")
+    fun edit(@PathVariable("id") id: Long, form: TaskUpdateForm): String {
+
+        val task = taskRepository.findById(id) ?: throw NotFoundException()
+        form.content = task.content
+        form.done = task.done
+        return "tasks/edit"
     }
 
     @GetMapping("new")
@@ -27,7 +39,7 @@ class TaskController(private val taskRepository: TaskRepository) {
     @PostMapping
     fun create(@Validated form: TaskCreateForm,
                bindingResult: BindingResult): String {
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "tasks/new"
         }
 
